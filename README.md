@@ -115,4 +115,4 @@ The application starts with the Administrator Login. Use the Administrator accou
 
 ## Repository
 
-GitHub: https://github.com/pasindurjana28-dot/SMChemicals-System
+GitHub: https://github.com/pasinduranjana28-dot/SMChemicals-System
