@@ -173,4 +173,38 @@ public class SupplierDAO {
 
         return supplierList;
     }
+    
+        // GET SUPPLIER BY ID
+        public Supplier getSupplierById(int supplierId) {
+
+            String sql = "SELECT * FROM suppliers WHERE supplier_id = ?";
+
+            try (Connection con = DBConnection.getConnection();
+                 PreparedStatement pst = con.prepareStatement(sql)) {
+
+                pst.setInt(1, supplierId);
+
+                try (ResultSet rs = pst.executeQuery()) {
+
+                    if (rs.next()) {
+
+                        Supplier supplier = new Supplier();
+
+                        supplier.setSupplierId(rs.getInt("supplier_id"));
+                        supplier.setSupplierName(rs.getString("supplier_name"));
+                        supplier.setPhone(rs.getString("phone"));
+                        supplier.setEmail(rs.getString("email"));
+                        supplier.setAddress(rs.getString("address"));
+
+                        return supplier;
+                    }
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
 }

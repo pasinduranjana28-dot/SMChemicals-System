@@ -10,6 +10,9 @@ import entity.Purchase;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import entity.PurchaseItem;
+
 /**
  *
  * @author Pasindu
@@ -607,5 +610,89 @@ public class PurchaseDAO {
     }
 }   
             
-            
+        // GET PURCHASE BY ID
+        public Purchase getPurchaseById(int purchaseId) {
+
+            String sql = "SELECT * FROM purchases WHERE purchase_id = ?";
+
+            try (Connection con = DBConnection.getConnection();
+                 PreparedStatement pst = con.prepareStatement(sql)) {
+
+                pst.setInt(1, purchaseId);
+
+                try (ResultSet rs = pst.executeQuery()) {
+
+                    if (rs.next()) {
+
+                        Purchase purchase = new Purchase();
+
+                        purchase.setPurchaseId(
+                                rs.getInt("purchase_id"));
+
+                        purchase.setSupplierId(
+                                rs.getInt("supplier_id"));
+
+                        purchase.setPurchaseDate(
+                                rs.getDate("purchase_date"));
+
+                        purchase.setTotalAmount(
+                                rs.getDouble("total_amount"));
+
+                        return purchase;
+                    }
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+        
+            // GET PURCHASE ITEM BY PURCHASE ID
+        public PurchaseItem getPurchaseItemByPurchaseId(int purchaseId) {
+
+            String sql = "SELECT * FROM purchase_items "
+                       + "WHERE purchase_id = ?";
+
+            try (Connection con = DBConnection.getConnection();
+                 PreparedStatement pst = con.prepareStatement(sql)) {
+
+                pst.setInt(1, purchaseId);
+
+                try (ResultSet rs = pst.executeQuery()) {
+
+                    if (rs.next()) {
+
+                        PurchaseItem item = new PurchaseItem();
+
+                        item.setPurchaseItemId(
+                                rs.getInt("purchase_item_id"));
+
+                        item.setPurchaseId(
+                                rs.getInt("purchase_id"));
+
+                        item.setProductId(
+                                rs.getInt("product_id"));
+
+                        item.setQuantity(
+                                rs.getInt("quantity"));
+
+                        item.setUnitPrice(
+                                rs.getDouble("unit_price"));
+
+                        item.setSubtotal(
+                                rs.getDouble("subtotal"));
+
+                        return item;
+                    }
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+        
 }

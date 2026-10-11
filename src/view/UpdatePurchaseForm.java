@@ -1,0 +1,670 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+package view;
+
+import dao.ProductDAO;
+import dao.PurchaseDAO;
+import entity.Purchase;
+import entity.PurchaseItem;
+import javax.swing.JOptionPane;
+import java.text.SimpleDateFormat;
+
+import entity.Product;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
+/**
+ *
+ * @author Pasindu
+ */
+public class UpdatePurchaseForm extends javax.swing.JFrame {
+    
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(UpdatePurchaseForm.class.getName());
+    
+    private PurchaseDAO purchaseDAO;
+    private PurchaseForm purchaseForm;
+
+    private java.util.Map<Integer, String> supplierMap;
+    private java.util.Map<Integer, String> productMap;
+    
+    private ProductDAO productDAO = new ProductDAO();
+
+    /**
+     * Creates new form UpdatePurchaseForm
+     */
+    public UpdatePurchaseForm(PurchaseForm purchaseForm) {
+
+        initComponents();
+
+        this.purchaseForm = purchaseForm;
+        this.purchaseDAO = new PurchaseDAO();
+
+        setDefaultCloseOperation(
+                javax.swing.WindowConstants.DISPOSE_ON_CLOSE
+        );
+
+        totalAmountTF.setEditable(false);
+
+        loadPurchaseIDs();
+        loadSuppliers();
+        loadProducts();
+        
+        productCMB.addActionListener(e -> {
+            updateUnitPriceFromSelectedProduct();
+            calculateTotal();
+        });
+
+        quantityTF.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                calculateTotal();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                calculateTotal();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                calculateTotal();
+            }
+        });
+
+        unitPriceTF.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                calculateTotal();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                calculateTotal();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                calculateTotal();
+            }
+        });
+    }
+    
+        private void loadPurchaseIDs() {
+
+        purchaseIDCMB.removeAllItems();
+
+        purchaseIDCMB.addItem("Select Purchase ID");
+
+        for (Purchase purchase : purchaseDAO.getAllPurchases()) {
+
+            purchaseIDCMB.addItem(
+                    String.valueOf(purchase.getPurchaseId())
+            );
+        }
+    }
+        
+        
+        private void loadSuppliers() {
+
+        supplierMap = purchaseDAO.getSupplierList();
+
+        supplierCMB.removeAllItems();
+
+        supplierCMB.addItem("Select Supplier");
+
+        for (String supplierName : supplierMap.values()) {
+            supplierCMB.addItem(supplierName);
+        }
+    }
+        
+        private void loadProducts() {
+
+        productMap = purchaseDAO.getProductList();
+
+        productCMB.removeAllItems();
+
+        productCMB.addItem("Select Product");
+
+        for (String productName : productMap.values()) {
+            productCMB.addItem(productName);
+        }
+    }
+        
+        private void updateUnitPriceFromSelectedProduct() {
+
+        if (productCMB.getSelectedIndex() <= 0) {
+            return;
+        }
+
+        int productId = (int) productMap.keySet().toArray()
+                [productCMB.getSelectedIndex() - 1];
+
+        Product product = productDAO.getProductById(productId);
+
+        if (product != null) {
+            unitPriceTF.setText(
+                    String.valueOf(product.getUnitPrice())
+            );
+        }
+    }
+        
+        private void calculateTotal() {
+
+            try {
+                int quantity = Integer.parseInt(
+                        quantityTF.getText().trim()
+                );
+
+                double unitPrice = Double.parseDouble(
+                        unitPriceTF.getText().trim()
+                );
+
+                if (quantity > 0 && unitPrice >= 0) {
+                    totalAmountTF.setText(
+                            String.format("%.2f", quantity * unitPrice)
+                    );
+                } else {
+                    totalAmountTF.setText("");
+                }
+
+            } catch (NumberFormatException e) {
+                totalAmountTF.setText("");
+            }
+        }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jPanel1 = new javax.swing.JPanel();
+        titleLBL = new javax.swing.JLabel();
+        productIDLBL = new javax.swing.JLabel();
+        purchaseIDCMB = new javax.swing.JComboBox<>();
+        productNameLBL = new javax.swing.JLabel();
+        descriptionLBL = new javax.swing.JLabel();
+        unitPriceLBL = new javax.swing.JLabel();
+        categoryLBL = new javax.swing.JLabel();
+        quantityTF = new javax.swing.JTextField();
+        updateBTN = new javax.swing.JButton();
+        clearBTN = new javax.swing.JButton();
+        backBTN = new javax.swing.JButton();
+        purchaseDateTF = new javax.swing.JTextField();
+        categoryLBL1 = new javax.swing.JLabel();
+        totalAmountTF = new javax.swing.JTextField();
+        supplierCMB = new javax.swing.JComboBox<>();
+        productCMB = new javax.swing.JComboBox<>();
+        descriptionLBL1 = new javax.swing.JLabel();
+        unitPriceTF = new javax.swing.JTextField();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setBackground(new java.awt.Color(245, 249, 255));
+
+        titleLBL.setBackground(new java.awt.Color(255, 255, 255));
+        titleLBL.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
+        titleLBL.setForeground(new java.awt.Color(16, 42, 80));
+        titleLBL.setText("Update Purchase");
+
+        productIDLBL.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
+        productIDLBL.setText("Purchase ID: ");
+
+        purchaseIDCMB.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
+        purchaseIDCMB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        purchaseIDCMB.addActionListener(this::purchaseIDCMBActionPerformed);
+
+        productNameLBL.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
+        productNameLBL.setText("Supplier: ");
+
+        descriptionLBL.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
+        descriptionLBL.setText("Product: ");
+
+        unitPriceLBL.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
+        unitPriceLBL.setText("Unit Price: ");
+
+        categoryLBL.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
+        categoryLBL.setText("Purchase Date: ");
+
+        quantityTF.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
+
+        updateBTN.setBackground(new java.awt.Color(46, 165, 255));
+        updateBTN.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
+        updateBTN.setForeground(new java.awt.Color(255, 255, 255));
+        updateBTN.setText("Update Purchase");
+        updateBTN.addActionListener(this::updateBTNActionPerformed);
+
+        clearBTN.setBackground(new java.awt.Color(229, 237, 247));
+        clearBTN.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
+        clearBTN.setForeground(new java.awt.Color(16, 42, 80));
+        clearBTN.setText("Clear");
+        clearBTN.addActionListener(this::clearBTNActionPerformed);
+
+        backBTN.setForeground(new java.awt.Color(16, 42, 80));
+        backBTN.setText("Back");
+        backBTN.addActionListener(this::backBTNActionPerformed);
+
+        purchaseDateTF.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
+
+        categoryLBL1.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
+        categoryLBL1.setText("Total Amount: ");
+
+        totalAmountTF.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
+
+        supplierCMB.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
+        supplierCMB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        productCMB.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
+        productCMB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        descriptionLBL1.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
+        descriptionLBL1.setText("Quantity: ");
+
+        unitPriceTF.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(36, 36, 36)
+                        .addComponent(backBTN)
+                        .addGap(66, 66, 66)
+                        .addComponent(titleLBL))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(102, 102, 102)
+                        .addComponent(updateBTN)
+                        .addGap(67, 67, 67)
+                        .addComponent(clearBTN))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(52, 52, 52)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(categoryLBL)
+                            .addComponent(descriptionLBL)
+                            .addComponent(productNameLBL)
+                            .addComponent(productIDLBL)
+                            .addComponent(categoryLBL1)
+                            .addComponent(unitPriceLBL)
+                            .addComponent(descriptionLBL1))
+                        .addGap(27, 27, 27)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(purchaseIDCMB, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(quantityTF, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(purchaseDateTF, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(totalAmountTF, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(supplierCMB, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(productCMB, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(unitPriceTF, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(145, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addComponent(titleLBL))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(backBTN)))
+                .addGap(42, 42, 42)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(productIDLBL)
+                    .addComponent(purchaseIDCMB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(productNameLBL)
+                    .addComponent(supplierCMB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(22, 22, 22)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(descriptionLBL)
+                    .addComponent(productCMB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(descriptionLBL1)
+                    .addComponent(quantityTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(unitPriceTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(unitPriceLBL))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(categoryLBL)
+                    .addComponent(purchaseDateTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(categoryLBL1)
+                    .addComponent(totalAmountTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(clearBTN)
+                    .addComponent(updateBTN))
+                .addGap(27, 27, 27))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void purchaseIDCMBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_purchaseIDCMBActionPerformed
+        // TODO add your handling code here:
+        if (purchaseIDCMB.getSelectedIndex() <= 0) {
+        clearFields();
+        return;
+        }
+
+        int purchaseId = Integer.parseInt(
+                purchaseIDCMB.getSelectedItem().toString()
+        );
+
+        Purchase purchase =
+                purchaseDAO.getPurchaseById(purchaseId);
+
+        PurchaseItem item =
+                purchaseDAO.getPurchaseItemByPurchaseId(purchaseId);
+
+        if (purchase != null && item != null) {
+
+            supplierCMB.setSelectedItem(
+                    getSupplierName(purchase.getSupplierId())
+            );
+
+            productCMB.setSelectedItem(
+                    getProductName(item.getProductId())
+            );
+
+            quantityTF.setText(
+                    String.valueOf(item.getQuantity())
+            );
+
+            unitPriceTF.setText(
+                    String.valueOf(item.getUnitPrice())
+            );
+
+            purchaseDateTF.setText(
+                    purchase.getPurchaseDate().toString()
+            );
+
+            totalAmountTF.setText(
+                    String.format("%.2f",
+                            item.getQuantity() *
+                            item.getUnitPrice())
+            );
+        }
+    }//GEN-LAST:event_purchaseIDCMBActionPerformed
+
+    private void updateBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBTNActionPerformed
+        // TODO add your handling code here:
+        if (purchaseIDCMB.getSelectedIndex() <= 0) {
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Please select a purchase."
+        );
+
+        return;
+    }
+
+        if (supplierCMB.getSelectedIndex() <= 0) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Please select a supplier."
+            );
+
+            return;
+        }
+
+        if (productCMB.getSelectedIndex() <= 0) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Please select a product."
+            );
+
+            return;
+        }
+
+        String quantityText = quantityTF.getText().trim();
+        String dateText = purchaseDateTF.getText().trim();
+
+        if (quantityText.isEmpty() || dateText.isEmpty()) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Please fill all required fields."
+            );
+
+            return;
+        }
+
+        int quantity;
+
+        try {
+            quantity = Integer.parseInt(quantityText);
+        } catch (NumberFormatException e) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Quantity must be a valid number."
+            );
+
+            return;
+        }
+
+        if (quantity <= 0) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Quantity must be greater than 0."
+            );
+
+            return;
+        }
+
+        int purchaseId =
+                Integer.parseInt(
+                        purchaseIDCMB.getSelectedItem().toString()
+                );
+
+        int supplierId =
+                (int) supplierMap.keySet().toArray()
+                        [supplierCMB.getSelectedIndex() - 1];
+
+        int productId =
+                (int) productMap.keySet().toArray()
+                        [productCMB.getSelectedIndex() - 1];
+
+        double unitPrice;
+
+        try {
+
+            unitPrice = Double.parseDouble(
+                    unitPriceTF.getText().trim()
+            );
+
+        } catch (NumberFormatException e) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Invalid unit price."
+            );
+
+            return;
+        }
+
+        double totalAmount = quantity * unitPrice;
+
+        java.sql.Date purchaseDate;
+
+        try {
+
+            SimpleDateFormat format =
+                    new SimpleDateFormat("yyyy-MM-dd");
+
+            format.setLenient(false);
+
+            java.util.Date utilDate =
+                    format.parse(dateText);
+
+            purchaseDate =
+                    new java.sql.Date(utilDate.getTime());
+
+        } catch (java.text.ParseException e) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Invalid date. Use format: yyyy-MM-dd"
+            );
+
+            return;
+        }
+
+        boolean success =
+                purchaseDAO.updatePurchaseWithItem(
+                        purchaseId,
+                        supplierId,
+                        purchaseDate,
+                        totalAmount,
+                        productId,
+                        quantity,
+                        unitPrice,
+                        totalAmount
+                );
+
+        if (success) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Purchase updated successfully!"
+            );
+
+            if (purchaseForm != null) {
+                purchaseForm.refreshPurchaseTable();
+            }
+
+            loadPurchaseIDs();
+            clearFields();
+
+        } else {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Failed to update purchase."
+            );
+        }
+    }//GEN-LAST:event_updateBTNActionPerformed
+
+    private void clearBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearBTNActionPerformed
+        // TODO add your handling code here:
+         clearFields();
+    }//GEN-LAST:event_clearBTNActionPerformed
+
+    private void backBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBTNActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_backBTNActionPerformed
+
+        private String getSupplierName(int supplierId) {
+
+        return supplierMap.get(supplierId);
+    }
+        
+        private String getProductName(int productId) {
+
+        return productMap.get(productId);
+    }
+        
+        private void clearFields() {
+
+        if (purchaseIDCMB.getItemCount() > 0) {
+            purchaseIDCMB.setSelectedIndex(0);
+        }
+
+        if (supplierCMB.getItemCount() > 0) {
+            supplierCMB.setSelectedIndex(0);
+        }
+
+        if (productCMB.getItemCount() > 0) {
+            productCMB.setSelectedIndex(0);
+        }
+
+        quantityTF.setText("");
+        unitPriceTF.setText("");
+        purchaseDateTF.setText("");
+        totalAmountTF.setText("");
+    }
+        
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
+            logger.log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(() -> new UpdatePurchaseForm(null).setVisible(true));
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton backBTN;
+    private javax.swing.JLabel categoryLBL;
+    private javax.swing.JLabel categoryLBL1;
+    private javax.swing.JButton clearBTN;
+    private javax.swing.JLabel descriptionLBL;
+    private javax.swing.JLabel descriptionLBL1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JComboBox<String> productCMB;
+    private javax.swing.JLabel productIDLBL;
+    private javax.swing.JLabel productNameLBL;
+    private javax.swing.JTextField purchaseDateTF;
+    private javax.swing.JComboBox<String> purchaseIDCMB;
+    private javax.swing.JTextField quantityTF;
+    private javax.swing.JComboBox<String> supplierCMB;
+    private javax.swing.JLabel titleLBL;
+    private javax.swing.JTextField totalAmountTF;
+    private javax.swing.JLabel unitPriceLBL;
+    private javax.swing.JTextField unitPriceTF;
+    private javax.swing.JButton updateBTN;
+    // End of variables declaration//GEN-END:variables
+}
+

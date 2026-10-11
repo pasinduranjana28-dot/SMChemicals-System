@@ -6,6 +6,7 @@ package dao;
 
 import database.DBConnection;
 import entity.Sale;
+import entity.SaleItem;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
 
 /**
  *
@@ -570,6 +572,85 @@ public class SalesDAO {
                 }
             }
         }
+        
+        
+        
+            // GET SALE BY ID
+            public Sale getSaleById(int saleId) {
+
+                String sql = "SELECT * FROM sales WHERE sale_id = ?";
+
+                try (Connection con = DBConnection.getConnection();
+                     PreparedStatement pst = con.prepareStatement(sql)) {
+
+                    pst.setInt(1, saleId);
+
+                    try (ResultSet rs = pst.executeQuery()) {
+
+                        if (rs.next()) {
+                            Sale sale = new Sale();
+
+                            sale.setSaleId(rs.getInt("sale_id"));
+                            sale.setCustomerId(rs.getInt("customer_id"));
+                            sale.setSaleDate(rs.getDate("sale_date"));
+                            sale.setTotalAmount(rs.getDouble("total_amount"));
+
+                            return sale;
+                        }
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+
+        // GET SALE ITEM BY SALE ID
+        public SaleItem getSaleItemBySaleId(int saleId) {
+
+            String sql =
+                    "SELECT * FROM sale_items WHERE sale_id = ?";
+
+            try (Connection con = DBConnection.getConnection();
+                 PreparedStatement pst = con.prepareStatement(sql)) {
+
+                pst.setInt(1, saleId);
+
+                try (ResultSet rs = pst.executeQuery()) {
+
+                    if (rs.next()) {
+                        SaleItem item = new SaleItem();
+
+                        item.setSaleItemId(
+                                rs.getInt("sale_item_id"));
+
+                        item.setSaleId(
+                                rs.getInt("sale_id"));
+
+                        item.setProductId(
+                                rs.getInt("product_id"));
+
+                        item.setQuantity(
+                                rs.getInt("quantity"));
+
+                        item.setUnitPrice(
+                                rs.getDouble("unit_price"));
+
+                        item.setSubtotal(
+                                rs.getDouble("subtotal"));
+
+                        return item;
+                    }
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
         
         
 }

@@ -24,7 +24,36 @@ public class PaymentForm extends javax.swing.JFrame {
     public PaymentForm() {
         initComponents();
         
-        paymentIDTF.setEditable(false);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        
+        // Style the payment table
+        javax.swing.table.JTableHeader header = jTable1.getTableHeader();
+
+        header.setDefaultRenderer(new javax.swing.table.DefaultTableCellRenderer() {
+            @Override
+            public java.awt.Component getTableCellRendererComponent(
+                    javax.swing.JTable table, Object value,
+                    boolean isSelected, boolean hasFocus,
+                    int row, int column) {
+
+                javax.swing.JLabel label = (javax.swing.JLabel)
+                    super.getTableCellRendererComponent(
+                        table, value, isSelected, hasFocus, row, column);
+
+                label.setBackground(new java.awt.Color(16, 42, 80));
+                label.setForeground(java.awt.Color.WHITE);
+                label.setFont(new java.awt.Font(
+                    "Segoe UI", java.awt.Font.BOLD, 13));
+                label.setHorizontalAlignment(javax.swing.JLabel.LEFT);
+                label.setOpaque(true);
+
+                return label;
+            }
+        });
+
+        header.setPreferredSize(new java.awt.Dimension(0, 30));
+        header.repaint();
+        
 
         loadInvoices();
         loadPayments();
@@ -80,6 +109,10 @@ public class PaymentForm extends javax.swing.JFrame {
         }
     }
         
+        public void refreshPaymentTable() {
+            loadPayments();
+        }
+        
     
 
     /**
@@ -93,13 +126,11 @@ public class PaymentForm extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        paymentIDTF = new javax.swing.JTextField();
         invoiceCMB = new javax.swing.JComboBox<>();
         paymentDateTF = new javax.swing.JTextField();
         amountTF = new javax.swing.JTextField();
@@ -117,13 +148,11 @@ public class PaymentForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(204, 255, 204));
+        jPanel1.setBackground(new java.awt.Color(245, 249, 255));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(16, 42, 80));
         jLabel1.setText("Payment Management");
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabel2.setText("Payment ID: ");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel3.setText("Invoice: ");
@@ -140,8 +169,6 @@ public class PaymentForm extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel7.setText("Payment Status: ");
 
-        paymentIDTF.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
-
         invoiceCMB.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         invoiceCMB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         invoiceCMB.addActionListener(this::invoiceCMBActionPerformed);
@@ -156,22 +183,33 @@ public class PaymentForm extends javax.swing.JFrame {
         paymentStatusCMB.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         paymentStatusCMB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
+        addBTN.setBackground(new java.awt.Color(33, 150, 243));
         addBTN.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        addBTN.setText("Add");
+        addBTN.setForeground(new java.awt.Color(255, 255, 255));
+        addBTN.setText("Add Payment");
         addBTN.addActionListener(this::addBTNActionPerformed);
 
+        updateBTN.setBackground(new java.awt.Color(220, 235, 255));
         updateBTN.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        updateBTN.setText("Update");
+        updateBTN.setForeground(new java.awt.Color(16, 42, 80));
+        updateBTN.setText("Update Payment");
         updateBTN.addActionListener(this::updateBTNActionPerformed);
 
+        deleteBTN.setBackground(new java.awt.Color(255, 95, 105));
         deleteBTN.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        deleteBTN.setText("Delete");
+        deleteBTN.setForeground(new java.awt.Color(255, 255, 255));
+        deleteBTN.setText("Delete Payment");
         deleteBTN.addActionListener(this::deleteBTNActionPerformed);
 
+        clearBTN.setBackground(new java.awt.Color(229, 237, 247));
         clearBTN.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        clearBTN.setForeground(new java.awt.Color(16, 42, 80));
         clearBTN.setText("Clear");
         clearBTN.addActionListener(this::clearBTNActionPerformed);
 
+        jScrollPane1.setBackground(new java.awt.Color(255, 255, 255));
+
+        jTable1.setForeground(new java.awt.Color(16, 42, 80));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
@@ -183,6 +221,10 @@ public class PaymentForm extends javax.swing.JFrame {
                 "ID", "Invoice", "Date", "Amount", "Method", "Status"
             }
         ));
+        jTable1.setRowHeight(26);
+        jTable1.setSelectionBackground(new java.awt.Color(232, 240, 252));
+        jTable1.setSelectionForeground(new java.awt.Color(16, 42, 80));
+        jTable1.setShowHorizontalLines(true);
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTable1MouseClicked(evt);
@@ -190,13 +232,17 @@ public class PaymentForm extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
+        refreshBTN.setBackground(new java.awt.Color(229, 237, 247));
+        refreshBTN.setForeground(new java.awt.Color(16, 42, 80));
         refreshBTN.setText("Refresh");
         refreshBTN.addActionListener(this::refreshBTNActionPerformed);
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel8.setText("Payment List");
 
+        backBTN.setBackground(new java.awt.Color(229, 237, 247));
         backBTN.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        backBTN.setForeground(new java.awt.Color(16, 42, 80));
         backBTN.setText("Back");
         backBTN.addActionListener(this::backBTNActionPerformed);
 
@@ -205,49 +251,44 @@ public class PaymentForm extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(121, 121, 121)
+                .addGap(215, 215, 215)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(paymentDateTF, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(invoiceCMB, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(104, 104, 104))
+                        .addGap(70, 70, 70)
+                        .addComponent(invoiceCMB, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel7)
-                                .addGap(18, 18, 18)
-                                .addComponent(paymentStatusCMB, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addGap(18, 18, 18)
-                                .addComponent(amountTF, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(27, 27, 27)
-                                .addComponent(paymentIDTF, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addGap(18, 18, 18)
-                                .addComponent(paymentDateTF, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addGap(18, 18, 18)
-                                .addComponent(paymentMethodCMB, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(226, 226, 226)
+                        .addComponent(jLabel5)
+                        .addGap(33, 33, 33)
+                        .addComponent(amountTF, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(paymentMethodCMB, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addGap(18, 18, 18)
+                        .addComponent(paymentStatusCMB, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(addBTN)
-                    .addComponent(updateBTN)
-                    .addComponent(clearBTN)
-                    .addComponent(deleteBTN))
-                .addGap(191, 191, 191))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel8)
-                .addGap(330, 330, 330)
-                .addComponent(refreshBTN)
-                .addGap(53, 53, 53))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(deleteBTN)
+                                    .addComponent(updateBTN))
+                                .addGap(126, 126, 126))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(addBTN)
+                                .addGap(142, 142, 142))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(163, 163, 163)
+                        .addComponent(clearBTN)
+                        .addGap(0, 0, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(37, 37, 37)
                 .addComponent(backBTN)
@@ -257,7 +298,13 @@ public class PaymentForm extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 960, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel8)
+                .addGap(334, 334, 334)
+                .addComponent(refreshBTN)
+                .addGap(49, 49, 49))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -269,54 +316,48 @@ public class PaymentForm extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(26, 26, 26)
                         .addComponent(backBTN)))
+                .addGap(45, 45, 45)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(invoiceCMB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(40, 40, 40)
+                        .addGap(15, 15, 15)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(paymentIDTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(21, 21, 21)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(invoiceCMB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jLabel4)
+                            .addComponent(paymentDateTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(52, 52, 52)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel6)
+                                    .addComponent(paymentMethodCMB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel7)
+                                    .addComponent(paymentStatusCMB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(updateBTN)
+                                .addGap(28, 28, 28)
+                                .addComponent(deleteBTN)
+                                .addGap(28, 28, 28)
+                                .addComponent(clearBTN))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel5)
+                                .addComponent(amountTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                        .addComponent(jLabel8))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
                         .addComponent(addBTN)
-                        .addGap(23, 23, 23)))
-                .addGap(17, 17, 17)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(paymentDateTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(updateBTN))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(amountTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel6)
-                            .addComponent(paymentMethodCMB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(39, 39, 39)
-                        .addComponent(deleteBTN)))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel7)
-                            .addComponent(paymentStatusCMB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(9, 9, 9)
-                        .addComponent(clearBTN)))
-                .addGap(21, 21, 21)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(refreshBTN)
-                    .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
-                .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(refreshBTN)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -505,270 +546,26 @@ public class PaymentForm extends javax.swing.JFrame {
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         // TODO add your handling code here:
-        int selectedRow = jTable1.getSelectedRow();
-
-        if (selectedRow >= 0) {
-
-            paymentIDTF.setText(
-                    jTable1.getValueAt(selectedRow, 0).toString()
-            );
-
-            String invoiceId =
-                    jTable1.getValueAt(selectedRow, 1).toString();
-
-            invoiceCMB.setSelectedItem(invoiceId);
-
-            paymentDateTF.setText(
-                    jTable1.getValueAt(selectedRow, 2).toString()
-            );
-
-            amountTF.setText(
-                    jTable1.getValueAt(selectedRow, 3).toString()
-            );
-
-            paymentMethodCMB.setSelectedItem(
-                    jTable1.getValueAt(selectedRow, 4).toString()
-            );
-
-            paymentStatusCMB.setSelectedItem(
-                    jTable1.getValueAt(selectedRow, 5).toString()
-            );
-        }
+        
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void updateBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBTNActionPerformed
         // TODO add your handling code here:
-            if (paymentIDTF.getText().trim().isEmpty()) {
-
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Please select a payment from the table."
-            );
-
-            return;
-        }
-
-        if (invoiceCMB.getSelectedIndex() <= 0) {
-
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Please select an invoice."
-            );
-
-            return;
-        }
-
-        String dateText = paymentDateTF.getText().trim();
-        String amountText = amountTF.getText().trim();
-
-        if (dateText.isEmpty()) {
-
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Please enter payment date."
-            );
-
-            return;
-        }
-
-        if (amountText.isEmpty()) {
-
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Please enter payment amount."
-            );
-
-            return;
-        }
-
-        if (paymentMethodCMB.getSelectedIndex() <= 0) {
-
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Please select payment method."
-            );
-
-            return;
-        }
-
-        if (paymentStatusCMB.getSelectedIndex() <= 0) {
-
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Please select payment status."
-            );
-
-            return;
-        }
-
-        try {
-
-            int paymentId =
-                    Integer.parseInt(paymentIDTF.getText().trim());
-
-            int invoiceId =
-                    Integer.parseInt(
-                            invoiceCMB.getSelectedItem().toString()
-                    );
-
-            double amount =
-                    Double.parseDouble(amountText);
-
-            if (amount <= 0) {
-
-                javax.swing.JOptionPane.showMessageDialog(
-                        this,
-                        "Amount must be greater than 0."
-                );
-
-                return;
-            }
-
-            java.sql.Date paymentDate =
-                    java.sql.Date.valueOf(dateText);
-
-            String paymentMethod =
-                    paymentMethodCMB.getSelectedItem().toString();
-
-            String paymentStatus =
-                    paymentStatusCMB.getSelectedItem().toString();
-
-            Payment payment = new Payment();
-
-            payment.setPaymentId(paymentId);
-            payment.setInvoiceId(invoiceId);
-            payment.setPaymentDate(paymentDate);
-            payment.setAmount(amount);
-            payment.setPaymentMethod(paymentMethod);
-            payment.setPaymentStatus(paymentStatus);
-
-            PaymentDAO dao = new PaymentDAO();
-
-            if (dao.updatePayment(payment)) {
-
-                javax.swing.JOptionPane.showMessageDialog(
-                        this,
-                        "Payment updated successfully."
-                );
-
-                paymentIDTF.setText("");
-                invoiceCMB.setSelectedIndex(0);
-                paymentDateTF.setText("");
-                amountTF.setText("");
-                paymentMethodCMB.setSelectedIndex(0);
-                paymentStatusCMB.setSelectedIndex(0);
-
-                loadPayments();
-
-            } else {
-
-                javax.swing.JOptionPane.showMessageDialog(
-                        this,
-                        "Failed to update payment."
-                );
-            }
-
-        } catch (NumberFormatException e) {
-
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Please enter valid numeric values."
-            );
-
-        } catch (IllegalArgumentException e) {
-
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Invalid date. Use format: YYYY-MM-DD"
-            );
-
-        } catch (Exception e) {
-
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Error: " + e.getMessage()
-            );
-
-            e.printStackTrace();
-        }
+            UpdatePaymentForm form = new UpdatePaymentForm(this);
+            form.setLocationRelativeTo(this);
+            form.setVisible(true);
+            
     }//GEN-LAST:event_updateBTNActionPerformed
 
     private void deleteBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBTNActionPerformed
         // TODO add your handling code here:
-        if (paymentIDTF.getText().trim().isEmpty()) {
-
-        javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "Please select a payment to delete."
-        );
-
-        return;
-        }
-
-        int confirm = javax.swing.JOptionPane.showConfirmDialog(
-                this,
-                "Are you sure you want to delete this payment?",
-                "Confirm Delete",
-                javax.swing.JOptionPane.YES_NO_OPTION
-        );
-
-        if (confirm != javax.swing.JOptionPane.YES_OPTION) {
-            return;
-        }
-
-        try {
-
-            int paymentId = Integer.parseInt(
-                    paymentIDTF.getText().trim()
-            );
-
-            PaymentDAO dao = new PaymentDAO();
-
-            if (dao.deletePayment(paymentId)) {
-
-                javax.swing.JOptionPane.showMessageDialog(
-                        this,
-                        "Payment deleted successfully."
-                );
-
-                paymentIDTF.setText("");
-                invoiceCMB.setSelectedIndex(0);
-                paymentDateTF.setText("");
-                amountTF.setText("");
-                paymentMethodCMB.setSelectedIndex(0);
-                paymentStatusCMB.setSelectedIndex(0);
-
-                loadPayments();
-
-            } else {
-
-                javax.swing.JOptionPane.showMessageDialog(
-                        this,
-                        "Failed to delete payment."
-                );
-            }
-
-        } catch (NumberFormatException e) {
-
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Invalid payment ID."
-            );
-
-        } catch (Exception e) {
-
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Error: " + e.getMessage()
-            );
-
-            e.printStackTrace();
-        }
+            DeletePaymentForm form = new DeletePaymentForm(this);
+            form.setLocationRelativeTo(this);
+            form.setVisible(true);
     }//GEN-LAST:event_deleteBTNActionPerformed
 
     private void clearBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearBTNActionPerformed
         // TODO add your handling code here:
-        paymentIDTF.setText("");
         invoiceCMB.setSelectedIndex(0);
         paymentDateTF.setText("");
         amountTF.setText("");
@@ -820,7 +617,6 @@ public class PaymentForm extends javax.swing.JFrame {
     private javax.swing.JButton deleteBTN;
     private javax.swing.JComboBox<String> invoiceCMB;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -831,7 +627,6 @@ public class PaymentForm extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField paymentDateTF;
-    private javax.swing.JTextField paymentIDTF;
     private javax.swing.JComboBox<String> paymentMethodCMB;
     private javax.swing.JComboBox<String> paymentStatusCMB;
     private javax.swing.JButton refreshBTN;

@@ -186,5 +186,48 @@ public class CustomerDAO {
 
         return customers;
     }
+        
+        
+        // update custoomer 
+        public Customer getCustomerById(int customerId) {
+
+        String sql = "SELECT customer_id, customer_name, phone, email, address "
+                   + "FROM customers WHERE customer_id = ?";
+
+            try {
+                Connection con = DBConnection.getConnection();
+                PreparedStatement pst = con.prepareStatement(sql);
+
+                pst.setInt(1, customerId);
+
+                ResultSet rs = pst.executeQuery();
+
+                if (rs.next()) {
+
+                    Customer customer = new Customer();
+
+                    customer.setCustomerId(rs.getInt("customer_id"));
+                    customer.setCustomerName(rs.getString("customer_name"));
+                    customer.setPhone(rs.getString("phone"));
+                    customer.setEmail(rs.getString("email"));
+                    customer.setAddress(rs.getString("address"));
+
+                    rs.close();
+                    pst.close();
+                    con.close();
+
+                    return customer;
+                }
+
+                rs.close();
+                pst.close();
+                con.close();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
 
 }

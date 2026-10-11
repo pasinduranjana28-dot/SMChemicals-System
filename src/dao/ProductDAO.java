@@ -9,7 +9,9 @@ import entity.Product;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 /**
  *
  * @author Pasindu
@@ -69,7 +71,40 @@ public class ProductDAO {
 
         return products;
     }
-    
+
+    // GET PRODUCT BY ID
+    public Product getProductById(int productId) {
+
+        String sql = "SELECT * FROM products WHERE product_id = ?";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement pst = con.prepareStatement(sql)) {
+
+            pst.setInt(1, productId);
+
+            try (ResultSet rs = pst.executeQuery()) {
+
+                if (rs.next()) {
+
+                    Product product = new Product();
+
+                    product.setProductId(rs.getInt("product_id"));
+                    product.setProductName(rs.getString("product_name"));
+                    product.setDescription(rs.getString("description"));
+                    product.setUnitPrice(rs.getDouble("unit_price"));
+                    product.setCategory(rs.getString("category"));
+
+                    return product;
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     // SEARCH PRODUCTS
     public List<Product> searchProducts(String keyword) {
 
@@ -87,19 +122,20 @@ public class ProductDAO {
             pst.setString(1, searchKeyword);
             pst.setString(2, searchKeyword);
 
-            ResultSet rs = pst.executeQuery();
+            try (ResultSet rs = pst.executeQuery()) {
 
-            while (rs.next()) {
+                while (rs.next()) {
 
-                Product product = new Product();
+                    Product product = new Product();
 
-                product.setProductId(rs.getInt("product_id"));
-                product.setProductName(rs.getString("product_name"));
-                product.setDescription(rs.getString("description"));
-                product.setUnitPrice(rs.getDouble("unit_price"));
-                product.setCategory(rs.getString("category"));
+                    product.setProductId(rs.getInt("product_id"));
+                    product.setProductName(rs.getString("product_name"));
+                    product.setDescription(rs.getString("description"));
+                    product.setUnitPrice(rs.getDouble("unit_price"));
+                    product.setCategory(rs.getString("category"));
 
-                products.add(product);
+                    products.add(product);
+                }
             }
 
         } catch (SQLException e) {
@@ -108,7 +144,6 @@ public class ProductDAO {
 
         return products;
     }
-
 
     // UPDATE PRODUCT
     public boolean updateProduct(Product product) {
@@ -154,30 +189,31 @@ public class ProductDAO {
             return false;
         }
     }
-    
-    public java.util.Map<Integer, String> getProductList() {
 
-    java.util.Map<Integer, String> productMap =
-            new java.util.LinkedHashMap<>();
+    // GET PRODUCT ID AND NAME LIST
+    public Map<Integer, String> getProductList() {
 
-    String sql = "SELECT product_id, product_name FROM products";
+        Map<Integer, String> productMap = new LinkedHashMap<>();
 
-    try (java.sql.Connection con = database.DBConnection.getConnection();
-         java.sql.PreparedStatement pst = con.prepareStatement(sql);
-         java.sql.ResultSet rs = pst.executeQuery()) {
+        String sql = "SELECT product_id, product_name FROM products";
 
-        while (rs.next()) {
-            productMap.put(
-                    rs.getInt("product_id"),
-                    rs.getString("product_name")
-            );
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement pst = con.prepareStatement(sql);
+             ResultSet rs = pst.executeQuery()) {
+
+            while (rs.next()) {
+
+                productMap.put(
+                        rs.getInt("product_id"),
+                        rs.getString("product_name")
+                );
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
-    } catch (java.sql.SQLException e) {
-        e.printStackTrace();
+        return productMap;
     }
-
-    return productMap;
-}
     
 }

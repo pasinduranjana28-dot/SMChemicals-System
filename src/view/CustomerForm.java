@@ -17,8 +17,15 @@ public class CustomerForm extends javax.swing.JFrame {
      */
     public CustomerForm() {
         initComponents();
+        
+         CustomerPanel.removeAll();
         CustomerPanel.setLayout(new java.awt.BorderLayout());
-        CustomerPanel.add(new view.CustomerPanel(), java.awt.BorderLayout.CENTER);
+
+        view.CustomerPanel customerPanel = new view.CustomerPanel();
+        CustomerPanel.add(customerPanel, java.awt.BorderLayout.CENTER);
+
+        CustomerPanel.revalidate();
+        CustomerPanel.repaint();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         pack();

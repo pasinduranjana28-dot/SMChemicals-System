@@ -21,6 +21,37 @@ public class CustomerPanel extends javax.swing.JPanel {
     public CustomerPanel() {
         initComponents();
         loadCustomers();
+        
+        // style table
+        
+        customerTable.getTableHeader().setBackground(
+            new java.awt.Color(16, 42, 80)
+        );
+        customerTable.getTableHeader().setForeground(
+            java.awt.Color.WHITE
+        );
+        customerTable.getTableHeader().setFont(
+            new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14)
+        );
+        
+        
+        javax.swing.table.JTableHeader header = customerTable.getTableHeader();
+
+        header.setDefaultRenderer((table, value, isSelected, hasFocus, row, column) -> {
+            javax.swing.JLabel label = new javax.swing.JLabel(
+                value == null ? "" : value.toString()
+            );
+
+            label.setOpaque(true);
+            label.setBackground(new java.awt.Color(16, 42, 80));
+            label.setForeground(java.awt.Color.WHITE);
+            label.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+            label.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 8, 5, 8));
+
+            return label;
+        });
+
+
     }
 
     private void loadCustomers() {
@@ -44,7 +75,9 @@ public class CustomerPanel extends javax.swing.JPanel {
             customer.getAddress()
         });
     }
-    
+}
+    public void refreshCustomerTable() {
+    loadCustomers();
 }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -57,8 +90,6 @@ public class CustomerPanel extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         customerTitleLBL = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        customerIDTF = new javax.swing.JTextField();
         addBTN = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -80,20 +111,16 @@ public class CustomerPanel extends javax.swing.JPanel {
         jLabel7 = new javax.swing.JLabel();
         refreshBTN = new javax.swing.JButton();
 
-        jPanel1.setBackground(new java.awt.Color(255, 204, 204));
+        jPanel1.setBackground(new java.awt.Color(247, 250, 255));
 
         customerTitleLBL.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        customerTitleLBL.setForeground(new java.awt.Color(16, 42, 80));
         customerTitleLBL.setText("CUSTOMER MANAGEMENT");
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabel1.setText("Customer ID:");
-
-        customerIDTF.setEditable(false);
-        customerIDTF.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-
-        addBTN.setBackground(new java.awt.Color(51, 255, 51));
+        addBTN.setBackground(new java.awt.Color(8, 120, 209));
         addBTN.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
-        addBTN.setText("Add");
+        addBTN.setForeground(new java.awt.Color(255, 255, 255));
+        addBTN.setText("Add Customer");
         addBTN.addActionListener(this::addBTNActionPerformed);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
@@ -116,20 +143,25 @@ public class CustomerPanel extends javax.swing.JPanel {
 
         addressTF.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
-        updateBTN.setBackground(new java.awt.Color(255, 255, 102));
+        updateBTN.setBackground(new java.awt.Color(220, 235, 255));
         updateBTN.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
-        updateBTN.setText("Update");
+        updateBTN.setForeground(new java.awt.Color(16, 42, 80));
+        updateBTN.setText("Update Customer");
         updateBTN.addActionListener(this::updateBTNActionPerformed);
 
-        deleteBTN.setBackground(new java.awt.Color(255, 51, 51));
+        deleteBTN.setBackground(new java.awt.Color(220, 53, 69));
         deleteBTN.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
-        deleteBTN.setText("Delete");
+        deleteBTN.setForeground(new java.awt.Color(255, 255, 255));
+        deleteBTN.setText("Delete Customer");
         deleteBTN.addActionListener(this::deleteBTNActionPerformed);
 
+        clearBTN.setBackground(new java.awt.Color(229, 237, 247));
         clearBTN.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
+        clearBTN.setForeground(new java.awt.Color(16, 42, 80));
         clearBTN.setText("Clear");
         clearBTN.addActionListener(this::clearBTNActionPerformed);
 
+        customerTable.setForeground(new java.awt.Color(16, 42, 80));
         customerTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
@@ -141,6 +173,10 @@ public class CustomerPanel extends javax.swing.JPanel {
                 "ID", "Name", "Phone", "Email", "Address"
             }
         ));
+        customerTable.setRowHeight(26);
+        customerTable.setSelectionBackground(new java.awt.Color(231, 240, 252));
+        customerTable.setSelectionForeground(new java.awt.Color(16, 42, 80));
+        customerTable.setShowHorizontalLines(true);
         customerTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 customerTableMouseClicked(evt);
@@ -148,6 +184,8 @@ public class CustomerPanel extends javax.swing.JPanel {
         });
         jScrollPane2.setViewportView(customerTable);
 
+        backBTN.setBackground(new java.awt.Color(229, 237, 247));
+        backBTN.setForeground(new java.awt.Color(16, 42, 80));
         backBTN.setText("Back");
         backBTN.addActionListener(this::backBTNActionPerformed);
 
@@ -156,6 +194,7 @@ public class CustomerPanel extends javax.swing.JPanel {
 
         searchCustomerTF.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
+        searchBTN.setBackground(new java.awt.Color(8, 120, 209));
         searchBTN.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         searchBTN.setText("Search");
         searchBTN.addActionListener(this::searchBTNActionPerformed);
@@ -163,6 +202,7 @@ public class CustomerPanel extends javax.swing.JPanel {
         jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel7.setText("Customer List");
 
+        refreshBTN.setBackground(new java.awt.Color(229, 237, 247));
         refreshBTN.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         refreshBTN.setText("Refresh");
         refreshBTN.addActionListener(this::refreshBTNActionPerformed);
@@ -171,60 +211,60 @@ public class CustomerPanel extends javax.swing.JPanel {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 93, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 805, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(90, 90, 90))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(59, 59, 59)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(59, 59, 59)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel3)
-                                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel1)
-                                            .addComponent(jLabel2)
-                                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(50, 50, 50)
-                                        .addComponent(backBTN)))
-                                .addGap(62, 62, 62))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(addBTN)
-                                .addGap(45, 45, 45)))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(phoneTF, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(customerTitleLBL)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(26, 26, 26)
-                                .addComponent(updateBTN)
-                                .addGap(60, 60, 60)
-                                .addComponent(deleteBTN)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(clearBTN)
-                                .addGap(38, 38, 38))
-                            .addComponent(customerNameTF)
-                            .addComponent(emailTF, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(addressTF)
-                            .addComponent(customerIDTF, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(50, 50, 50)
+                                .addComponent(backBTN)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(62, 62, 62)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(phoneTF, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(customerNameTF, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
+                                    .addComponent(emailTF, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(addressTF)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(39, 39, 39)
+                                .addComponent(customerTitleLBL))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(65, 65, 65)
+                        .addGap(59, 59, 59)
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(searchCustomerTF, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(56, 56, 56)
-                        .addComponent(searchBTN)))
+                        .addGap(39, 39, 39)
+                        .addComponent(searchBTN))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(218, 218, 218)
+                        .addComponent(addBTN)
+                        .addGap(195, 195, 195)
+                        .addComponent(clearBTN))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(202, 202, 202)
+                        .addComponent(updateBTN)
+                        .addGap(146, 146, 146)
+                        .addComponent(deleteBTN)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(437, 437, 437)
-                .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(refreshBTN)
-                .addGap(102, 102, 102))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(437, 437, 437)
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(refreshBTN))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 93, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 805, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(90, 90, 90))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -233,45 +273,42 @@ public class CustomerPanel extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(customerTitleLBL)
                     .addComponent(backBTN))
-                .addGap(31, 31, 31)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(customerIDTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(29, 29, 29)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(customerNameTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(6, 6, 6)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(phoneTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(6, 6, 6)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(emailTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(addressTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addGap(24, 24, 24)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(addressTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(23, 23, 23)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(addBTN)
                     .addComponent(clearBTN)
-                    .addComponent(deleteBTN)
-                    .addComponent(updateBTN))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                    .addComponent(addBTN))
+                .addGap(33, 33, 33)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(updateBTN)
+                    .addComponent(deleteBTN))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(searchCustomerTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(searchBTN))
-                .addGap(21, 21, 21)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(27, 27, 27)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel7)
                     .addComponent(refreshBTN))
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -294,34 +331,44 @@ public class CustomerPanel extends javax.swing.JPanel {
 
     private void addBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBTNActionPerformed
         // TODO add your handling code here:
-        Customer customer = new Customer();
+        // Check whether all fields are filled
+    if (customerNameTF.getText().trim().isEmpty()
+            || phoneTF.getText().trim().isEmpty()
+            || emailTF.getText().trim().isEmpty()
+            || addressTF.getText().trim().isEmpty()) {
 
-        customer.setCustomerName(customerNameTF.getText());
-        customer.setPhone(phoneTF.getText());
-        customer.setEmail(emailTF.getText());
-        customer.setAddress(addressTF.getText());
+        JOptionPane.showMessageDialog(this,
+                "Please fill all customer fields.");
 
-        CustomerDAO customerDAO = new CustomerDAO();
+        return;
+    }
 
-        if (customerDAO.addCustomer(customer)) {
+    Customer customer = new Customer();
 
-            JOptionPane.showMessageDialog(this,
-                    "Customer added successfully!");
+    customer.setCustomerName(customerNameTF.getText().trim());
+    customer.setPhone(phoneTF.getText().trim());
+    customer.setEmail(emailTF.getText().trim());
+    customer.setAddress(addressTF.getText().trim());
 
-            loadCustomers();
+    CustomerDAO customerDAO = new CustomerDAO();
 
-            clearFields();
+    if (customerDAO.addCustomer(customer)) {
 
-        } else {
+        JOptionPane.showMessageDialog(this,
+                "Customer added successfully!");
 
-            JOptionPane.showMessageDialog(this,
-                    "Failed to add customer.");
-        }
+        loadCustomers();
+        clearFields();
+
+    } else {
+
+        JOptionPane.showMessageDialog(this,
+                "Failed to add customer.");
+    }
     }//GEN-LAST:event_addBTNActionPerformed
 
         private void clearFields() {
-
-        customerIDTF.setText("");
+            
         customerNameTF.setText("");
         phoneTF.setText("");
         emailTF.setText("");
@@ -336,38 +383,12 @@ public class CustomerPanel extends javax.swing.JPanel {
 
     private void updateBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBTNActionPerformed
         // TODO add your handling code here:
-        if (customerIDTF.getText().trim().isEmpty()) {
-        JOptionPane.showMessageDialog(this,
-                "Please select a customer from the table first.");
-        return;
-    }
+        
+        UpdateCustomerForm updateForm =
+            new UpdateCustomerForm(this);
 
-    Customer customer = new Customer();
-
-    customer.setCustomerId(
-            Integer.parseInt(customerIDTF.getText().trim())
-    );
-
-    customer.setCustomerName(customerNameTF.getText());
-    customer.setPhone(phoneTF.getText());
-    customer.setEmail(emailTF.getText());
-    customer.setAddress(addressTF.getText());
-
-    CustomerDAO customerDAO = new CustomerDAO();
-
-    if (customerDAO.updateCustomer(customer)) {
-
-        JOptionPane.showMessageDialog(this,
-                "Customer updated successfully!");
-
-        loadCustomers();
-        clearFields();
-
-    } else {
-
-        JOptionPane.showMessageDialog(this,
-                "Failed to update customer.");
-    }
+         updateForm.setVisible(true);
+        
     }//GEN-LAST:event_updateBTNActionPerformed
 
     private void customerTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_customerTableMouseClicked
@@ -375,7 +396,7 @@ public class CustomerPanel extends javax.swing.JPanel {
         int row = customerTable.getSelectedRow();
 
         if (row >= 0) {
-            customerIDTF.setText(customerTable.getValueAt(row, 0).toString());
+
             customerNameTF.setText(customerTable.getValueAt(row, 1).toString());
             phoneTF.setText(customerTable.getValueAt(row, 2).toString());
             emailTF.setText(customerTable.getValueAt(row, 3).toString());
@@ -385,39 +406,10 @@ public class CustomerPanel extends javax.swing.JPanel {
 
     private void deleteBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBTNActionPerformed
         // TODO add your handling code here:
-        if (customerIDTF.getText().trim().isEmpty()) {
-        JOptionPane.showMessageDialog(this,
-                "Please select a customer from the table first.");
-        return;
-    }
+        DeleteCustomerForm deleteForm =
+            new DeleteCustomerForm(this);
 
-    int customerId = Integer.parseInt(customerIDTF.getText().trim());
-
-    int confirm = JOptionPane.showConfirmDialog(
-            this,
-            "Are you sure you want to delete this customer?",
-            "Confirm Delete",
-            JOptionPane.YES_NO_OPTION
-    );
-
-    if (confirm == JOptionPane.YES_OPTION) {
-
-        CustomerDAO customerDAO = new CustomerDAO();
-
-        if (customerDAO.deleteCustomer(customerId)) {
-
-            JOptionPane.showMessageDialog(this,
-                    "Customer deleted successfully!");
-
-            loadCustomers();
-            clearFields();
-
-        } else {
-
-            JOptionPane.showMessageDialog(this,
-                    "Failed to delete customer.");
-        }
-    }
+        deleteForm.setVisible(true);
     }//GEN-LAST:event_deleteBTNActionPerformed
 
     private void backBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBTNActionPerformed
@@ -465,13 +457,11 @@ public class CustomerPanel extends javax.swing.JPanel {
     private javax.swing.JTextField addressTF;
     private javax.swing.JButton backBTN;
     private javax.swing.JButton clearBTN;
-    private javax.swing.JTextField customerIDTF;
     private javax.swing.JTextField customerNameTF;
     private javax.swing.JTable customerTable;
     private javax.swing.JLabel customerTitleLBL;
     private javax.swing.JButton deleteBTN;
     private javax.swing.JTextField emailTF;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

@@ -4,6 +4,7 @@
  */
 package view;
 
+import javax.swing.table.DefaultTableCellRenderer;
 /**
  *
  * @author Pasindu
@@ -18,9 +19,62 @@ public class SupplierForm extends javax.swing.JFrame {
     public SupplierForm() {
         initComponents();
         
+        // Style the supplier table
+        supplierTable.setRowHeight(26);
+        supplierTable.setBackground(java.awt.Color.WHITE);
+        supplierTable.setForeground(new java.awt.Color(16, 42, 80));
+        supplierTable.setGridColor(new java.awt.Color(220, 220, 220));
+        supplierTable.setShowHorizontalLines(true);
+        supplierTable.setShowVerticalLines(false);
+        supplierTable.setAutoCreateRowSorter(true);
+
+        supplierTable.setSelectionBackground(
+                new java.awt.Color(232, 240, 252)
+        );
+        supplierTable.setSelectionForeground(
+                new java.awt.Color(16, 42, 80)
+        );
+
+        // Style the table header
+        javax.swing.table.JTableHeader header =
+                supplierTable.getTableHeader();
+
+        header.setDefaultRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public java.awt.Component getTableCellRendererComponent(
+                    javax.swing.JTable table,
+                    Object value,
+                    boolean isSelected,
+                    boolean hasFocus,
+                    int row,
+                    int column) {
+
+                javax.swing.JLabel label = (javax.swing.JLabel)
+                        super.getTableCellRendererComponent(
+                                table, value, isSelected, hasFocus, row, column
+                        );
+
+                label.setBackground(new java.awt.Color(16, 42, 80));
+                label.setForeground(java.awt.Color.WHITE);
+                label.setFont(new java.awt.Font(
+                        "Segoe UI", java.awt.Font.BOLD, 13
+                ));
+                label.setOpaque(true);
+                label.setHorizontalAlignment(javax.swing.JLabel.LEFT);
+                label.setBorder(javax.swing.BorderFactory.createEmptyBorder(
+                        0, 6, 0, 0
+                ));
+
+                return label;
+            }
+        });
+
+        header.setPreferredSize(new java.awt.Dimension(0, 30));
+        header.repaint();
+        
+        
         loadSuppliers();
         
-        supplierIDTF.setEditable(false);
 
         setDefaultCloseOperation(
             javax.swing.WindowConstants.DISPOSE_ON_CLOSE
@@ -48,6 +102,12 @@ public class SupplierForm extends javax.swing.JFrame {
     }
 }
 
+        public void refreshSupplierTable() {
+            loadSuppliers();
+        }
+    
+    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -59,12 +119,10 @@ public class SupplierForm extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        supplierIDTF = new javax.swing.JTextField();
         supplierNameTF = new javax.swing.JTextField();
         emailTF = new javax.swing.JTextField();
         phoneTF = new javax.swing.JTextField();
@@ -85,13 +143,11 @@ public class SupplierForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel1.setBackground(new java.awt.Color(245, 249, 255));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(16, 42, 80));
         jLabel1.setText("Supplier Management");
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabel2.setText("Supplier ID: ");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel3.setText("Supplier Name: ");
@@ -105,20 +161,17 @@ public class SupplierForm extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel6.setText("Email: ");
 
-        supplierIDTF.setEditable(false);
-        supplierIDTF.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        supplierIDTF.addActionListener(this::supplierIDTFActionPerformed);
+        supplierNameTF.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
 
-        supplierNameTF.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        emailTF.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
 
-        emailTF.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-
-        phoneTF.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        phoneTF.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
 
         addressTA.setColumns(20);
         addressTA.setRows(5);
         jScrollPane1.setViewportView(addressTA);
 
+        supplierTable.setForeground(new java.awt.Color(16, 42, 80));
         supplierTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
@@ -130,6 +183,10 @@ public class SupplierForm extends javax.swing.JFrame {
                 "Supplier ID", "Supplier Name", "Phone", "Email", "Address"
             }
         ));
+        supplierTable.setRowHeight(26);
+        supplierTable.setSelectionBackground(new java.awt.Color(232, 240, 252));
+        supplierTable.setSelectionForeground(new java.awt.Color(16, 42, 80));
+        supplierTable.setShowHorizontalLines(true);
         supplierTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 supplierTableMouseClicked(evt);
@@ -140,19 +197,26 @@ public class SupplierForm extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel7.setText("Supplier List");
 
+        addBTN.setBackground(new java.awt.Color(33, 150, 243));
         addBTN.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        addBTN.setText("Add");
+        addBTN.setForeground(new java.awt.Color(255, 255, 255));
+        addBTN.setText("Add Supplier");
         addBTN.addActionListener(this::addBTNActionPerformed);
 
+        updateBTN.setBackground(new java.awt.Color(220, 235, 255));
         updateBTN.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        updateBTN.setText("Update");
+        updateBTN.setText("Update Supplier");
         updateBTN.addActionListener(this::updateBTNActionPerformed);
 
+        deleteBTN.setBackground(new java.awt.Color(255, 82, 82));
         deleteBTN.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        deleteBTN.setText("Delete");
+        deleteBTN.setForeground(new java.awt.Color(255, 255, 255));
+        deleteBTN.setText("Delete Supplier");
         deleteBTN.addActionListener(this::deleteBTNActionPerformed);
 
+        clearBTN.setBackground(new java.awt.Color(229, 237, 247));
         clearBTN.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        clearBTN.setForeground(new java.awt.Color(16, 42, 80));
         clearBTN.setText("Clear");
         clearBTN.addActionListener(this::clearBTNActionPerformed);
 
@@ -161,15 +225,21 @@ public class SupplierForm extends javax.swing.JFrame {
 
         searchSupplierTF.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
 
+        searchBTN.setBackground(new java.awt.Color(33, 150, 243));
         searchBTN.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        searchBTN.setForeground(new java.awt.Color(255, 255, 255));
         searchBTN.setText("Search");
         searchBTN.addActionListener(this::searchBTNActionPerformed);
 
+        refreshBTN.setBackground(new java.awt.Color(229, 237, 247));
         refreshBTN.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        refreshBTN.setForeground(new java.awt.Color(16, 42, 80));
         refreshBTN.setText("Refresh");
         refreshBTN.addActionListener(this::refreshBTNActionPerformed);
 
+        backBTN.setBackground(new java.awt.Color(229, 237, 247));
         backBTN.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        backBTN.setForeground(new java.awt.Color(16, 42, 80));
         backBTN.setText("Back");
         backBTN.addActionListener(this::backBTNActionPerformed);
 
@@ -177,112 +247,106 @@ public class SupplierForm extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(208, 208, 208)
-                        .addComponent(addBTN)
-                        .addGap(39, 39, 39)
-                        .addComponent(updateBTN)
-                        .addGap(48, 48, 48)
-                        .addComponent(deleteBTN)
-                        .addGap(47, 47, 47)
-                        .addComponent(clearBTN))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(37, 37, 37)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(searchSupplierTF, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(178, 178, 178))
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel4)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(phoneTF, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addGap(5, 5, 5)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(supplierIDTF, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel3)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(supplierNameTF, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(emailTF, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(searchBTN)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(28, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 949, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(23, 23, 23))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(315, 315, 315)
-                .addComponent(refreshBTN)
-                .addGap(39, 39, 39))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(47, 47, 47)
                 .addComponent(backBTN)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 384, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(300, 300, 300))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(620, 620, 620)
+                        .addComponent(searchBTN))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(186, 186, 186)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(116, 116, 116)
+                                .addComponent(supplierNameTF, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(deleteBTN)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel4)
+                                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(111, 111, 111)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(emailTF, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(phoneTF, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(53, 53, 53)
+                                .addComponent(clearBTN))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(132, 132, 132)
+                        .addComponent(addBTN)
+                        .addGap(47, 47, 47)
+                        .addComponent(updateBTN)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(searchSupplierTF, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(315, 315, 315)
+                .addComponent(refreshBTN)
+                .addGap(39, 39, 39))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(26, 26, 26)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(backBTN))
-                .addGap(21, 21, 21)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(supplierIDTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(supplierNameTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(phoneTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(emailTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(addBTN)
-                    .addComponent(updateBTN)
-                    .addComponent(deleteBTN)
-                    .addComponent(clearBTN))
-                .addGap(47, 47, 47)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(searchSupplierTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(searchBTN))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(backBTN))
+                        .addGap(58, 58, 58)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(supplierNameTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(phoneTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addComponent(emailTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(50, 50, 50)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(addBTN)
+                            .addComponent(updateBTN)
+                            .addComponent(deleteBTN)
+                            .addComponent(clearBTN))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 117, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(searchBTN)
+                            .addComponent(searchSupplierTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel8))
+                        .addGap(35, 35, 35)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(refreshBTN, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(81, 81, 81))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -304,10 +368,6 @@ public class SupplierForm extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void supplierIDTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supplierIDTFActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_supplierIDTFActionPerformed
 
     private void addBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBTNActionPerformed
         // TODO add your handling code here:
@@ -361,141 +421,24 @@ public class SupplierForm extends javax.swing.JFrame {
 
     private void updateBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBTNActionPerformed
         // TODO add your handling code here:
-        String idText = supplierIDTF.getText().trim();
-    String name = supplierNameTF.getText().trim();
-    String phone = phoneTF.getText().trim();
-    String email = emailTF.getText().trim();
-    String address = addressTA.getText().trim();
+            UpdateSupplierForm updateForm =
+            new UpdateSupplierForm(this);
 
-    if (idText.isEmpty()) {
-        javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "Please select a supplier from the table."
-        );
-        return;
-    }
-
-    if (name.isEmpty() || phone.isEmpty()
-            || email.isEmpty() || address.isEmpty()) {
-
-        javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "Please fill all supplier fields."
-        );
-        return;
-    }
-
-    int supplierId;
-
-    try {
-        supplierId = Integer.parseInt(idText);
-    } catch (NumberFormatException e) {
-        javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "Invalid supplier ID."
-        );
-        return;
-    }
-
-    entity.Supplier supplier = new entity.Supplier(
-            supplierId,
-            name,
-            phone,
-            email,
-            address
-    );
-
-    dao.SupplierDAO dao = new dao.SupplierDAO();
-
-    if (dao.updateSupplier(supplier)) {
-
-        javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "Supplier updated successfully."
-        );
-
-        supplierNameTF.setText("");
-        phoneTF.setText("");
-        emailTF.setText("");
-        addressTA.setText("");
-
-        loadSuppliers();
-
-    } else {
-
-        javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "Failed to update supplier."
-        );
-    }
+            updateForm.setLocationRelativeTo(this);
+            updateForm.setVisible(true);
     }//GEN-LAST:event_updateBTNActionPerformed
 
     private void deleteBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBTNActionPerformed
         // TODO add your handling code here:
-        String idText = supplierIDTF.getText().trim();
+        DeleteSupplierForm deleteForm =
+            new DeleteSupplierForm(this);
 
-    if (idText.isEmpty()) {
-
-        javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "Please select a supplier from the table."
-        );
-        return;
-    }
-
-    int supplierId;
-
-    try {
-        supplierId = Integer.parseInt(idText);
-    } catch (NumberFormatException e) {
-
-        javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "Invalid supplier ID."
-        );
-        return;
-    }
-
-    int confirm = javax.swing.JOptionPane.showConfirmDialog(
-            this,
-            "Are you sure you want to delete this supplier?",
-            "Confirm Delete",
-            javax.swing.JOptionPane.YES_NO_OPTION
-    );
-
-    if (confirm != javax.swing.JOptionPane.YES_OPTION) {
-        return;
-    }
-
-    dao.SupplierDAO dao = new dao.SupplierDAO();
-
-    if (dao.deleteSupplier(supplierId)) {
-
-        javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "Supplier deleted successfully."
-        );
-
-        supplierIDTF.setText("");
-        supplierNameTF.setText("");
-        phoneTF.setText("");
-        emailTF.setText("");
-        addressTA.setText("");
-
-        loadSuppliers();
-
-    } else {
-
-        javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "Failed to delete supplier."
-        );
-    }
+        deleteForm.setLocationRelativeTo(this);
+        deleteForm.setVisible(true);
     }//GEN-LAST:event_deleteBTNActionPerformed
 
     private void clearBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearBTNActionPerformed
         // TODO add your handling code here:
-        supplierIDTF.setText("");
         supplierNameTF.setText("");
         phoneTF.setText("");
         emailTF.setText("");
@@ -504,30 +447,7 @@ public class SupplierForm extends javax.swing.JFrame {
 
     private void supplierTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_supplierTableMouseClicked
         // TODO add your handling code here:
-        int selectedRow = supplierTable.getSelectedRow();
-
-    if (selectedRow >= 0) {
-
-        supplierIDTF.setText(
-                supplierTable.getValueAt(selectedRow, 0).toString()
-        );
-
-        supplierNameTF.setText(
-                supplierTable.getValueAt(selectedRow, 1).toString()
-        );
-
-        phoneTF.setText(
-                supplierTable.getValueAt(selectedRow, 2).toString()
-        );
-
-        emailTF.setText(
-                supplierTable.getValueAt(selectedRow, 3).toString()
-        );
-
-        addressTA.setText(
-                supplierTable.getValueAt(selectedRow, 4).toString()
-        );
-    }
+       
     }//GEN-LAST:event_supplierTableMouseClicked
 
     private void searchBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBTNActionPerformed
@@ -598,7 +518,6 @@ public class SupplierForm extends javax.swing.JFrame {
     private javax.swing.JButton deleteBTN;
     private javax.swing.JTextField emailTF;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -612,7 +531,6 @@ public class SupplierForm extends javax.swing.JFrame {
     private javax.swing.JButton refreshBTN;
     private javax.swing.JButton searchBTN;
     private javax.swing.JTextField searchSupplierTF;
-    private javax.swing.JTextField supplierIDTF;
     private javax.swing.JTextField supplierNameTF;
     private javax.swing.JTable supplierTable;
     private javax.swing.JButton updateBTN;

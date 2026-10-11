@@ -21,14 +21,97 @@ public class InvoiceForm extends javax.swing.JFrame {
     /**
      * Creates new form InvoiceForm
      */
-    public InvoiceForm() {
-        initComponents();
-        
-        invoiceIDTF.setEditable(false);
+    
+        public InvoiceForm() {
+            initComponents();
+            
+            // Style the invoice table
+            invoiceTable.setRowHeight(26);
 
-        loadSales();
-        loadInvoices();
-    }
+            invoiceTable.setBackground(java.awt.Color.WHITE);
+            invoiceTable.setForeground(new java.awt.Color(16, 42, 80));
+
+            invoiceTable.setSelectionBackground(
+                new java.awt.Color(232, 240, 252)
+            );
+
+            invoiceTable.setSelectionForeground(
+                new java.awt.Color(16, 42, 80)
+            );
+
+            invoiceTable.setGridColor(
+                new java.awt.Color(220, 220, 220)
+            );
+
+            invoiceTable.setShowHorizontalLines(true);
+            invoiceTable.setShowVerticalLines(false);
+            invoiceTable.setAutoCreateRowSorter(true);
+
+            // Style the invoice table header
+            javax.swing.table.JTableHeader header =
+                    invoiceTable.getTableHeader();
+
+            header.setOpaque(true);
+
+            header.setDefaultRenderer(
+                new javax.swing.table.DefaultTableCellRenderer() {
+
+                    @Override
+                    public java.awt.Component getTableCellRendererComponent(
+                            javax.swing.JTable table,
+                            Object value,
+                            boolean isSelected,
+                            boolean hasFocus,
+                            int row,
+                            int column) {
+
+                        javax.swing.JLabel label =
+                            (javax.swing.JLabel)
+                            super.getTableCellRendererComponent(
+                                table, value, isSelected,
+                                hasFocus, row, column
+                            );
+
+                        label.setOpaque(true);
+
+                        label.setBackground(
+                            new java.awt.Color(16, 42, 80)
+                        );
+
+                        label.setForeground(java.awt.Color.WHITE);
+
+                        label.setFont(
+                            new java.awt.Font(
+                                "Segoe UI",
+                                java.awt.Font.BOLD,
+                                13
+                            )
+                        );
+
+                        label.setHorizontalAlignment(
+                            javax.swing.JLabel.LEFT
+                        );
+
+                        return label;
+                    }
+                }
+            );
+
+            header.setPreferredSize(
+                new java.awt.Dimension(0, 30)
+            );
+
+            header.repaint();
+            invoiceTable.repaint();
+
+
+            setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+            totalAmountTF.setEditable(false);
+
+            loadSales();
+            loadInvoices();
+        }
+
     
         private void loadSales() {
 
@@ -46,7 +129,6 @@ public class InvoiceForm extends javax.swing.JFrame {
         
         private void clearInvoiceForm() {
 
-        invoiceIDTF.setText("");
         saleCMB.setSelectedIndex(0);
         invoiceDateTF.setText("");
         totalAmountTF.setText("");
@@ -74,6 +156,11 @@ public class InvoiceForm extends javax.swing.JFrame {
             });
         }
     }
+        
+        public void refreshInvoiceTable() {
+            loadInvoices();
+        }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -86,11 +173,9 @@ public class InvoiceForm extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        invoiceIDTF = new javax.swing.JTextField();
         saleCMB = new javax.swing.JComboBox<>();
         invoiceDateTF = new javax.swing.JTextField();
         totalAmountTF = new javax.swing.JTextField();
@@ -106,13 +191,11 @@ public class InvoiceForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(204, 255, 255));
+        jPanel1.setBackground(new java.awt.Color(245, 249, 255));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(16, 42, 80));
         jLabel1.setText("Invoice Management");
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabel2.setText("Invoice ID: ");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel3.setText("Sale: ");
@@ -123,9 +206,6 @@ public class InvoiceForm extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel5.setText("Total Amount: ");
 
-        invoiceIDTF.setEditable(false);
-        invoiceIDTF.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
-
         saleCMB.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         saleCMB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         saleCMB.addActionListener(this::saleCMBActionPerformed);
@@ -134,22 +214,30 @@ public class InvoiceForm extends javax.swing.JFrame {
 
         totalAmountTF.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
 
+        addBTN.setBackground(new java.awt.Color(60, 165, 255));
         addBTN.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        addBTN.setText("Add");
+        addBTN.setForeground(new java.awt.Color(255, 255, 255));
+        addBTN.setText("Add Invoice");
         addBTN.addActionListener(this::addBTNActionPerformed);
 
+        updateBTN.setBackground(new java.awt.Color(220, 235, 255));
         updateBTN.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        updateBTN.setText("Update");
+        updateBTN.setForeground(new java.awt.Color(16, 42, 80));
+        updateBTN.setText("Update Invoice");
         updateBTN.addActionListener(this::updateBTNActionPerformed);
 
+        deleteBTN.setBackground(new java.awt.Color(255, 107, 120));
         deleteBTN.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        deleteBTN.setText("Delete");
+        deleteBTN.setText("Delete Invoice");
         deleteBTN.addActionListener(this::deleteBTNActionPerformed);
 
+        clearBTN.setBackground(new java.awt.Color(229, 237, 247));
         clearBTN.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        clearBTN.setForeground(new java.awt.Color(16, 42, 80));
         clearBTN.setText("Clear");
         clearBTN.addActionListener(this::clearBTNActionPerformed);
 
+        invoiceTable.setForeground(new java.awt.Color(16, 42, 80));
         invoiceTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -161,6 +249,9 @@ public class InvoiceForm extends javax.swing.JFrame {
                 "ID", "Sale ID", "Date", "Total Amount"
             }
         ));
+        invoiceTable.setSelectionBackground(new java.awt.Color(232, 240, 252));
+        invoiceTable.setSelectionForeground(new java.awt.Color(16, 42, 80));
+        invoiceTable.setShowHorizontalLines(true);
         invoiceTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 invoiceTableMouseClicked(evt);
@@ -171,10 +262,14 @@ public class InvoiceForm extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         jLabel6.setText("Invoice List");
 
+        refreshBTN.setBackground(new java.awt.Color(229, 237, 247));
+        refreshBTN.setForeground(new java.awt.Color(16, 42, 80));
         refreshBTN.setText("Refresh");
         refreshBTN.addActionListener(this::refreshBTNActionPerformed);
 
+        backBTN.setBackground(new java.awt.Color(229, 237, 247));
         backBTN.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        backBTN.setForeground(new java.awt.Color(16, 42, 80));
         backBTN.setText("Back");
         backBTN.addActionListener(this::backBTNActionPerformed);
 
@@ -182,57 +277,52 @@ public class InvoiceForm extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(86, 86, 86)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(18, 18, 18)
-                        .addComponent(saleCMB, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(addBTN)
-                                .addGap(52, 52, 52)
-                                .addComponent(updateBTN)
-                                .addGap(10, 10, 10))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel4)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(invoiceDateTF, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel2)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(invoiceIDTF, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(35, 35, 35))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addGap(18, 18, 18)
-                                .addComponent(totalAmountTF, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(47, 47, 47)
-                        .addComponent(deleteBTN)
-                        .addGap(65, 65, 65)
-                        .addComponent(clearBTN)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(28, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 935, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(42, 42, 42)
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(refreshBTN)
-                .addGap(36, 36, 36))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(backBTN)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addGap(314, 314, 314))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(61, 61, 61)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(addBTN)
+                                        .addGap(74, 74, 74)
+                                        .addComponent(updateBTN)
+                                        .addGap(70, 70, 70)
+                                        .addComponent(deleteBTN)
+                                        .addGap(75, 75, 75)
+                                        .addComponent(clearBTN))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(118, 118, 118)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(jLabel4)
+                                                .addGap(29, 29, 29)
+                                                .addComponent(invoiceDateTF, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(jLabel3)
+                                                .addGap(51, 51, 51)
+                                                .addComponent(saleCMB, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(jLabel5)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(totalAmountTF, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(311, 311, 311)
+                                .addComponent(refreshBTN))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap(28, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 924, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(36, 36, 36))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -244,35 +334,31 @@ public class InvoiceForm extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(22, 22, 22)
                         .addComponent(backBTN)))
-                .addGap(27, 27, 27)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(invoiceIDTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(39, 39, 39)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(saleCMB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(invoiceDateTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(24, 24, 24)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(totalAmountTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(41, 41, 41)
+                .addGap(78, 78, 78)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addBTN)
                     .addComponent(updateBTN)
                     .addComponent(deleteBTN)
                     .addComponent(clearBTN))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(refreshBTN))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(14, 14, 14))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -316,102 +402,10 @@ public class InvoiceForm extends javax.swing.JFrame {
 
     private void updateBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBTNActionPerformed
         // TODO add your handling code here:
-        // Validate Invoice ID
-        if (invoiceIDTF.getText().trim().isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Please select an invoice from the table."
-            );
-            return;
-        }
-
-        // Validate Sale
-        if (saleCMB.getSelectedIndex() <= 0) {
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Please select a sale."
-            );
-            return;
-        }
-
-        // Validate Date
-        String dateText = invoiceDateTF.getText().trim();
-
-        if (dateText.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Please enter invoice date (yyyy-MM-dd)."
-            );
-            return;
-        }
-
-        try {
-
-            int invoiceId = Integer.parseInt(
-                    invoiceIDTF.getText().trim()
-            );
-
-            int saleId = Integer.parseInt(
-                    saleCMB.getSelectedItem().toString()
-            );
-
-            double totalAmount = Double.parseDouble(
-                    totalAmountTF.getText().trim()
-            );
-
-            java.sql.Date invoiceDate =
-                    java.sql.Date.valueOf(dateText);
-
-            Invoice invoice = new Invoice();
-
-            invoice.setInvoiceId(invoiceId);
-            invoice.setSaleId(saleId);
-            invoice.setInvoiceDate(invoiceDate);
-            invoice.setTotalAmount(totalAmount);
-
-            InvoiceDAO dao = new InvoiceDAO();
-
-            if (dao.updateInvoice(invoice)) {
-
-                javax.swing.JOptionPane.showMessageDialog(
-                        this,
-                        "Invoice updated successfully."
-                );
-
-                clearInvoiceForm();
-                loadInvoices();
-
-            } else {
-
-                javax.swing.JOptionPane.showMessageDialog(
-                        this,
-                        "Failed to update invoice."
-                );
-            }
-
-        } catch (NumberFormatException e) {
-
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Please enter valid numeric values."
-            );
-
-        } catch (IllegalArgumentException e) {
-
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Invalid date. Please use yyyy-MM-dd."
-            );
-
-        } catch (Exception e) {
-
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Error: " + e.getMessage()
-            );
-
-            e.printStackTrace();
-        }
+            UpdateInvoiceForm form = new UpdateInvoiceForm(this);
+            form.setLocationRelativeTo(this);
+            form.setVisible(true);
+        
     }//GEN-LAST:event_updateBTNActionPerformed
 
     private void addBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBTNActionPerformed
@@ -516,94 +510,14 @@ public class InvoiceForm extends javax.swing.JFrame {
 
     private void invoiceTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_invoiceTableMouseClicked
         // TODO add your handling code here:
-       int selectedRow = invoiceTable.getSelectedRow();
-
-        if (selectedRow >= 0) {
-
-            invoiceIDTF.setText(
-                    invoiceTable.getValueAt(selectedRow, 0).toString()
-            );
-
-            String saleId =
-                    invoiceTable.getValueAt(selectedRow, 1).toString();
-
-            saleCMB.setSelectedItem(saleId);
-
-            invoiceDateTF.setText(
-                    invoiceTable.getValueAt(selectedRow, 2).toString()
-            );
-
-            totalAmountTF.setText(
-                    invoiceTable.getValueAt(selectedRow, 3).toString()
-            );
-        }
+        
     }//GEN-LAST:event_invoiceTableMouseClicked
 
     private void deleteBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBTNActionPerformed
         // TODO add your handling code here:
-         if (invoiceIDTF.getText().trim().isEmpty()) {
-
-        javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "Please select an invoice to delete."
-        );
-
-        return;
-    }
-
-        int confirm = javax.swing.JOptionPane.showConfirmDialog(
-                this,
-                "Are you sure you want to delete this invoice?",
-                "Confirm Delete",
-                javax.swing.JOptionPane.YES_NO_OPTION
-        );
-
-        if (confirm != javax.swing.JOptionPane.YES_OPTION) {
-            return;
-        }
-
-        try {
-
-            int invoiceId = Integer.parseInt(
-                    invoiceIDTF.getText().trim()
-            );
-
-            InvoiceDAO dao = new InvoiceDAO();
-
-            if (dao.deleteInvoice(invoiceId)) {
-
-                javax.swing.JOptionPane.showMessageDialog(
-                        this,
-                        "Invoice deleted successfully."
-                );
-
-                clearInvoiceForm();
-                loadInvoices();
-
-            } else {
-
-                javax.swing.JOptionPane.showMessageDialog(
-                        this,
-                        "Failed to delete invoice."
-                );
-            }
-
-        } catch (NumberFormatException e) {
-
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Invalid invoice ID."
-            );
-
-        } catch (Exception e) {
-
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Error: " + e.getMessage()
-            );
-
-            e.printStackTrace();
-        }
+            DeleteInvoiceForm form = new DeleteInvoiceForm(this);
+            form.setLocationRelativeTo(this);
+            form.setVisible(true);
     }//GEN-LAST:event_deleteBTNActionPerformed
 
     private void clearBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearBTNActionPerformed
@@ -653,10 +567,8 @@ public class InvoiceForm extends javax.swing.JFrame {
     private javax.swing.JButton clearBTN;
     private javax.swing.JButton deleteBTN;
     private javax.swing.JTextField invoiceDateTF;
-    private javax.swing.JTextField invoiceIDTF;
     private javax.swing.JTable invoiceTable;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

@@ -20,11 +20,73 @@ public class InventoryPanel extends javax.swing.JPanel {
     /**
      * Creates new form InventoryPanel
      */
-    public InventoryPanel() {
-        initComponents();
-        loadInventory();
-        loadProducts();
-    }
+        public InventoryPanel() {
+            initComponents();
+
+            // Style the inventory table
+            inventoryTable.setRowHeight(26);
+
+            inventoryTable.setBackground(java.awt.Color.WHITE);
+            inventoryTable.setForeground(new java.awt.Color(16, 42, 80));
+
+            inventoryTable.setSelectionBackground(
+                new java.awt.Color(231, 240, 252)
+            );
+            inventoryTable.setSelectionForeground(
+                new java.awt.Color(16, 42, 80)
+            );
+
+            // Style the table header
+            javax.swing.table.JTableHeader header =
+                    inventoryTable.getTableHeader();
+
+            header.setDefaultRenderer(
+                new javax.swing.table.DefaultTableCellRenderer() {
+                    @Override
+                    public java.awt.Component getTableCellRendererComponent(
+                            javax.swing.JTable table,
+                            Object value,
+                            boolean isSelected,
+                            boolean hasFocus,
+                            int row,
+                            int column) {
+
+                        javax.swing.JLabel label = (javax.swing.JLabel)
+                            super.getTableCellRendererComponent(
+                                table, value, isSelected, hasFocus, row, column
+                            );
+
+                        label.setOpaque(true);
+                        label.setBackground(new java.awt.Color(16, 42, 80));
+                        label.setForeground(java.awt.Color.WHITE);
+                        label.setFont(
+                            new java.awt.Font(
+                                "Segoe UI", java.awt.Font.BOLD, 13
+                            )
+                        );
+                        label.setBorder(
+                            javax.swing.UIManager.getBorder(
+                                "TableHeader.cellBorder"
+                            )
+                        );
+                        label.setHorizontalAlignment(
+                            javax.swing.SwingConstants.LEFT
+                        );
+
+                        return label;
+                    }
+                }
+            );
+
+            header.setPreferredSize(new java.awt.Dimension(0, 30));
+            header.repaint();
+
+            loadInventory();
+            loadProducts();
+        }
+
+    
+    
     private void clearFields() {
     productCMB.setSelectedIndex(0);    
     quantityTF.setText("");
@@ -110,9 +172,10 @@ private void loadInventory() {
         lowStockBTN = new javax.swing.JButton();
         productCMB = new javax.swing.JComboBox<>();
 
-        InventoryPanel.setBackground(new java.awt.Color(255, 255, 204));
+        InventoryPanel.setBackground(new java.awt.Color(247, 250, 255));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(16, 42, 80));
         jLabel1.setText("Inventory Management");
 
         productIDLBL.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
@@ -128,14 +191,19 @@ private void loadInventory() {
 
         quantityTF.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
 
+        stockInBTN.setBackground(new java.awt.Color(8, 120, 209));
         stockInBTN.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        stockInBTN.setForeground(new java.awt.Color(255, 255, 255));
         stockInBTN.setText("Stock IN");
         stockInBTN.addActionListener(this::stockInBTNActionPerformed);
 
+        clearBTN.setBackground(new java.awt.Color(229, 237, 247));
         clearBTN.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        clearBTN.setForeground(new java.awt.Color(16, 42, 80));
         clearBTN.setText("Clear");
         clearBTN.addActionListener(this::clearBTNActionPerformed);
 
+        inventoryTable.setForeground(new java.awt.Color(16, 42, 80));
         inventoryTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
@@ -147,17 +215,27 @@ private void loadInventory() {
                 "Inventory ID", "Product", "Quantity", "Reorder Level", "Last Updated"
             }
         ));
+        inventoryTable.setRowHeight(26);
+        inventoryTable.setSelectionBackground(new java.awt.Color(231, 240, 252));
+        inventoryTable.setSelectionForeground(new java.awt.Color(16, 42, 80));
+        inventoryTable.setShowHorizontalLines(true);
         jScrollPane1.setViewportView(inventoryTable);
 
-        backBTN.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
+        backBTN.setBackground(new java.awt.Color(229, 237, 247));
+        backBTN.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        backBTN.setForeground(new java.awt.Color(16, 42, 80));
         backBTN.setText("Back");
         backBTN.addActionListener(this::backBTNActionPerformed);
 
+        stockOutBTN.setBackground(new java.awt.Color(220, 235, 255));
         stockOutBTN.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        stockOutBTN.setForeground(new java.awt.Color(16, 42, 80));
         stockOutBTN.setText("Stock OUT");
         stockOutBTN.addActionListener(this::stockOutBTNActionPerformed);
 
+        lowStockBTN.setBackground(new java.awt.Color(220, 53, 69));
         lowStockBTN.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        lowStockBTN.setForeground(new java.awt.Color(255, 255, 255));
         lowStockBTN.setText("Low Stock Alert");
         lowStockBTN.addActionListener(this::lowStockBTNActionPerformed);
 

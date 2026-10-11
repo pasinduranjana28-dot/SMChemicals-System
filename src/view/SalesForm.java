@@ -22,13 +22,72 @@ public class SalesForm extends javax.swing.JFrame {
     private Map<Integer, String> customerMap;
     private Map<Integer, String> productMap;
     
+    private javax.swing.JTextField saleIDTF;
+    
     /**
      * Creates new form SalesForm
      */
     public SalesForm() {
         initComponents();
         
-        saleIDTF.setEditable(false);
+        // Style the sales table
+            salesTable.setRowHeight(26);
+
+            salesTable.setBackground(java.awt.Color.WHITE);
+            salesTable.setForeground(new java.awt.Color(16, 42, 80));
+
+            salesTable.setSelectionBackground(
+                new java.awt.Color(232, 240, 252)
+            );
+            salesTable.setSelectionForeground(
+                new java.awt.Color(16, 42, 80)
+            );
+
+            salesTable.setGridColor(new java.awt.Color(220, 220, 220));
+            salesTable.setShowHorizontalLines(true);
+            salesTable.setShowVerticalLines(false);
+            salesTable.setAutoCreateRowSorter(true);
+
+            // Style the sales table header
+            javax.swing.table.JTableHeader header =
+                    salesTable.getTableHeader();
+
+            header.setDefaultRenderer(
+                new javax.swing.table.DefaultTableCellRenderer() {
+                    @Override
+                    public java.awt.Component getTableCellRendererComponent(
+                            javax.swing.JTable table,
+                            Object value,
+                            boolean isSelected,
+                            boolean hasFocus,
+                            int row,
+                            int column) {
+
+                        javax.swing.JLabel label =
+                            (javax.swing.JLabel) super.getTableCellRendererComponent(
+                                table, value, isSelected, hasFocus, row, column
+                            );
+
+                        label.setOpaque(true);
+                        label.setBackground(new java.awt.Color(16, 42, 80));
+                        label.setForeground(java.awt.Color.WHITE);
+                        label.setFont(
+                            new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13)
+                        );
+                        label.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+                        label.setBorder(javax.swing.BorderFactory.createEmptyBorder(
+                            0, 8, 0, 4
+                        ));
+
+                        return label;
+                    }
+                }
+            );
+
+            header.setPreferredSize(new java.awt.Dimension(0, 30));
+            header.repaint();
+            salesTable.repaint();
+        
         unitPriceTF.setEditable(false);
         totalAmountTF.setEditable(false);
 
@@ -142,6 +201,10 @@ public class SalesForm extends javax.swing.JFrame {
             );
         }
     }
+        
+        public void refreshSalesTable() {
+            loadSales();
+        }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -154,14 +217,12 @@ public class SalesForm extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        saleIDTF = new javax.swing.JTextField();
         customerCMB = new javax.swing.JComboBox<>();
         productCMB = new javax.swing.JComboBox<>();
         quantityTF = new javax.swing.JTextField();
@@ -180,13 +241,11 @@ public class SalesForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(204, 204, 255));
+        jPanel1.setBackground(new java.awt.Color(245, 249, 255));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(16, 42, 80));
         jLabel1.setText("Sales Management");
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabel2.setText("Sales ID: ");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel3.setText("Customer: ");
@@ -206,9 +265,6 @@ public class SalesForm extends javax.swing.JFrame {
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel8.setText("Total Amount: ");
 
-        saleIDTF.setEditable(false);
-        saleIDTF.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
-
         customerCMB.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         customerCMB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -225,22 +281,31 @@ public class SalesForm extends javax.swing.JFrame {
 
         totalAmountTF.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
 
+        addBTN.setBackground(new java.awt.Color(60, 165, 255));
         addBTN.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        addBTN.setText("Add");
+        addBTN.setForeground(new java.awt.Color(255, 255, 255));
+        addBTN.setText("Add Sale");
         addBTN.addActionListener(this::addBTNActionPerformed);
 
+        updateBTN.setBackground(new java.awt.Color(220, 235, 255));
         updateBTN.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        updateBTN.setText("Update");
+        updateBTN.setForeground(new java.awt.Color(16, 42, 80));
+        updateBTN.setText("Update Sale");
         updateBTN.addActionListener(this::updateBTNActionPerformed);
 
+        deleteBTN.setBackground(new java.awt.Color(255, 107, 120));
         deleteBTN.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        deleteBTN.setText("Delete");
+        deleteBTN.setForeground(new java.awt.Color(255, 255, 255));
+        deleteBTN.setText("Delete Sale");
         deleteBTN.addActionListener(this::deleteBTNActionPerformed);
 
+        clearBTN.setBackground(new java.awt.Color(229, 237, 247));
         clearBTN.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        clearBTN.setForeground(new java.awt.Color(16, 42, 80));
         clearBTN.setText("Clear");
         clearBTN.addActionListener(this::clearBTNActionPerformed);
 
+        salesTable.setForeground(new java.awt.Color(16, 42, 80));
         salesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
@@ -252,6 +317,10 @@ public class SalesForm extends javax.swing.JFrame {
                 "ID", "Customer", "Product", "Quantity", "Unit Price", "Date", "Amount"
             }
         ));
+        salesTable.setRowHeight(26);
+        salesTable.setSelectionBackground(new java.awt.Color(232, 240, 252));
+        salesTable.setSelectionForeground(new java.awt.Color(16, 42, 80));
+        salesTable.setShowHorizontalLines(true);
         salesTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 salesTableMouseClicked(evt);
@@ -262,10 +331,14 @@ public class SalesForm extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel9.setText("Sales List");
 
+        refreshBTN.setBackground(new java.awt.Color(229, 237, 247));
+        refreshBTN.setForeground(new java.awt.Color(16, 42, 80));
         refreshBTN.setText("Refresh");
         refreshBTN.addActionListener(this::refreshBTNActionPerformed);
 
+        backBTN.setBackground(new java.awt.Color(229, 237, 247));
         backBTN.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        backBTN.setForeground(new java.awt.Color(16, 42, 80));
         backBTN.setText("Back");
         backBTN.addActionListener(this::backBTNActionPerformed);
 
@@ -274,6 +347,42 @@ public class SalesForm extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(211, 211, 211)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(239, 239, 239)
+                        .addComponent(jLabel9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(refreshBTN)
+                        .addGap(48, 48, 48))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel6)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel4))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(18, 18, 18)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(saleDateTF, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(quantityTF, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(unitPriceTF, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(8, 8, 8)
+                                        .addComponent(productCMB, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(customerCMB, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(totalAmountTF, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(55, 55, 55)
@@ -281,53 +390,18 @@ public class SalesForm extends javax.swing.JFrame {
                         .addGap(205, 205, 205)
                         .addComponent(jLabel1))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(143, 143, 143)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(unitPriceTF, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(saleDateTF, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(totalAmountTF, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(29, 29, 29)
-                                .addComponent(saleIDTF, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel5))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(quantityTF, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(productCMB, 0, 160, Short.MAX_VALUE)
-                                    .addComponent(customerCMB, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(267, 267, 267)
+                        .addGap(154, 154, 154)
                         .addComponent(addBTN)
-                        .addGap(52, 52, 52)
+                        .addGap(47, 47, 47)
                         .addComponent(updateBTN)
-                        .addGap(45, 45, 45)
+                        .addGap(55, 55, 55)
                         .addComponent(deleteBTN)
-                        .addGap(44, 44, 44)
+                        .addGap(55, 55, 55)
                         .addComponent(clearBTN))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
+                        .addGap(22, 22, 22)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 941, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(24, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(43, 43, 43)
-                .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(refreshBTN)
-                .addGap(44, 44, 44))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -339,18 +413,14 @@ public class SalesForm extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(30, 30, 30)
                         .addComponent(backBTN)))
-                .addGap(29, 29, 29)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(saleIDTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(customerCMB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(productCMB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(customerCMB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
@@ -367,18 +437,18 @@ public class SalesForm extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(totalAmountTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(36, 36, 36)
+                .addGap(51, 51, 51)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addBTN)
                     .addComponent(updateBTN)
                     .addComponent(deleteBTN)
                     .addComponent(clearBTN))
-                .addGap(28, 28, 28)
+                .addGap(100, 100, 100)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(refreshBTN))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -548,6 +618,7 @@ public class SalesForm extends javax.swing.JFrame {
             productCMB.setSelectedIndex(0);
             quantityTF.setText("");
             unitPriceTF.setText("");
+            saleDateTF.setText("");
             totalAmountTF.setText("");
 
             loadSales();
@@ -600,240 +671,20 @@ public class SalesForm extends javax.swing.JFrame {
 
     private void updateBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBTNActionPerformed
         // TODO add your handling code here:
-        int saleId;
-        int customerIndex = customerCMB.getSelectedIndex();
-        int productIndex = productCMB.getSelectedIndex();
-
-        if (saleIDTF.getText().trim().isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Please select a sale from the table."
-            );
-            return;
-        }
-
-        if (customerIndex <= 0) {
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Please select a customer."
-            );
-            return;
-        }
-
-        if (productIndex <= 0) {
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Please select a product."
-            );
-            return;
-        }
-
-        try {
-            saleId = Integer.parseInt(saleIDTF.getText().trim());
-        } catch (NumberFormatException e) {
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Invalid Sale ID."
-            );
-            return;
-        }
-
-        String quantityText = quantityTF.getText().trim();
-        String dateText = saleDateTF.getText().trim();
-
-        if (quantityText.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Please enter quantity."
-            );
-            return;
-        }
-
-        if (dateText.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Please enter sale date."
-            );
-            return;
-        }
-
-        int quantity;
-
-        try {
-            quantity = Integer.parseInt(quantityText);
-        } catch (NumberFormatException e) {
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Quantity must be a number."
-            );
-            return;
-        }
-
-        if (quantity <= 0) {
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Quantity must be greater than 0."
-            );
-            return;
-        }
-
-        double unitPrice;
-        double totalAmount;
-
-        try {
-            unitPrice = Double.parseDouble(
-                    unitPriceTF.getText().trim()
-            );
-
-            totalAmount = Double.parseDouble(
-                    totalAmountTF.getText().trim()
-            );
-
-        } catch (NumberFormatException e) {
-
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Invalid price or total amount."
-            );
-            return;
-        }
-
-        java.sql.Date saleDate;
-
-        try {
-
-            saleDate = java.sql.Date.valueOf(dateText);
-
-        } catch (IllegalArgumentException e) {
-
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Invalid date. Use format: YYYY-MM-DD"
-            );
-            return;
-        }
-
-        int customerId =
-                (int) customerMap.keySet()
-                        .toArray()[customerIndex - 1];
-
-        int productId =
-                (int) productMap.keySet()
-                        .toArray()[productIndex - 1];
-
-        SalesDAO dao = new SalesDAO();
-
-        boolean success = dao.updateSale(
-                saleId,
-                customerId,
-                saleDate,
-                totalAmount,
-                productId,
-                quantity,
-                unitPrice,
-                totalAmount
-        );
-
-        if (success) {
-
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Sale updated successfully."
-            );
-
-            customerCMB.setSelectedIndex(0);
-            productCMB.setSelectedIndex(0);
-            quantityTF.setText("");
-            unitPriceTF.setText("");
-            saleDateTF.setText("YYYY-MM-DD");
-            totalAmountTF.setText("");
-            saleIDTF.setText("");
-
-            loadSales();
-
-        } else {
-
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Failed to update sale. Check available stock."
-            );
-        }
+           UpdateSalesForm form = new UpdateSalesForm(this);
+            form.setLocationRelativeTo(this);
+            form.setVisible(true);
     }//GEN-LAST:event_updateBTNActionPerformed
 
     private void deleteBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBTNActionPerformed
         // TODO add your handling code here:
-        int saleId;
-
-        if (saleIDTF.getText().trim().isEmpty()) {
-
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Please select a sale from the table."
-            );
-
-            return;
-        }
-
-        try {
-
-            saleId = Integer.parseInt(
-                    saleIDTF.getText().trim()
-            );
-
-        } catch (NumberFormatException e) {
-
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Invalid Sale ID."
-            );
-
-            return;
-        }
-
-        int confirm = javax.swing.JOptionPane.showConfirmDialog(
-                this,
-                "Are you sure you want to delete this sale?",
-                "Confirm Delete",
-                javax.swing.JOptionPane.YES_NO_OPTION
-        );
-
-        if (confirm != javax.swing.JOptionPane.YES_OPTION) {
-            return;
-        }
-
-        SalesDAO dao = new SalesDAO();
-
-        boolean success = dao.deleteSale(saleId);
-
-        if (success) {
-
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Sale deleted successfully."
-            );
-
-            saleIDTF.setText("");
-            customerCMB.setSelectedIndex(0);
-            productCMB.setSelectedIndex(0);
-            quantityTF.setText("");
-            unitPriceTF.setText("");
-            saleDateTF.setText("YYYY-MM-DD");
-            totalAmountTF.setText("");
-
-            loadSales();
-
-        } else {
-
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Failed to delete sale."
-            );
-        }
+       DeleteSalesForm form = new DeleteSalesForm(this);
+        form.setLocationRelativeTo(this);
+        form.setVisible(true);
     }//GEN-LAST:event_deleteBTNActionPerformed
 
     private void clearBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearBTNActionPerformed
         // TODO add your handling code here:
-        saleIDTF.setText("");
 
         customerCMB.setSelectedIndex(0);
 
@@ -843,7 +694,7 @@ public class SalesForm extends javax.swing.JFrame {
 
         unitPriceTF.setText("");
 
-        saleDateTF.setText("YYYY-MM-DD");
+        saleDateTF.setText("");
 
         totalAmountTF.setText("");
     }//GEN-LAST:event_clearBTNActionPerformed
@@ -916,7 +767,6 @@ public class SalesForm extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> customerCMB;
     private javax.swing.JButton deleteBTN;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -930,7 +780,6 @@ public class SalesForm extends javax.swing.JFrame {
     private javax.swing.JTextField quantityTF;
     private javax.swing.JButton refreshBTN;
     private javax.swing.JTextField saleDateTF;
-    private javax.swing.JTextField saleIDTF;
     private javax.swing.JTable salesTable;
     private javax.swing.JTextField totalAmountTF;
     private javax.swing.JTextField unitPriceTF;
